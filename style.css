@@ -36,11 +36,11 @@ button {
   height: 60px;
 }
 
-.kebab-case {
+.add-entry {
   margin-top: 10px;
 }
 
-.kebab-case>button {
+.add-entry>button {
   width: 150px;
   height: 2.5rem;
 }
