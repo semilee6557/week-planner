@@ -106,7 +106,7 @@ tr {
 }
 
 .modal-content {
-  width: 60%;
+  width: 80%;
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -124,6 +124,12 @@ tr {
 form {
   width: 100%;
   margin: 10px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.dayTimeContainer {
   display: flex;
   justify-content: space-evenly;
 }
