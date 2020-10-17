@@ -32,6 +32,65 @@
       <button>Add Entry</button>
     </div>
 
+    <div class="modal hidden">
+
+      <div class="modal-container">
+        <div class="modal-content">
+        <h1>Add Entry</h1>
+
+        <form>
+
+          <label for="day">
+          <select name="day" id="day">
+            <option value="sunday" class="day-option">Day</option>
+            <option value="sunday" class="day-option">Sunday</option>
+            <option value="monday" class="day-option">Monday</option>
+            <option value="tuesday" class="day-option">Tuesday</option>
+            <option value="wednesday" class="day-option">Wednesday</option>
+            <option value="thursday" class="day-option">Thursday</option>
+            <option value="friday" class="day-option">Friday</option>
+            <option value="saturday" class="day-option">Saturday</option>
+          </select>
+          </label>
+
+          <label for="time">
+          <select name="time" id="time">
+            <option value="8AM">Time</option>
+            <option value="8AM">8AM</option>
+            <option value="9AM">9AM</option>
+            <option value="10AM">10AM</option>
+            <option value="11AM">11AM</option>
+            <option value="12PM">12PM</option>
+            <option value="1PM">1PM</option>
+            <option value="2PM">2PM</option>
+            <option value="3PM">3PM</option>
+            <option value="4PM">4PM</option>
+            <option value="5PM">5PM</option>
+            <option value="6PM">6PM</option>
+            <option value="7PM">7PM</option>
+            <option value="8PM">8PM</option>
+            <option value="9PM">9PM</option>
+            <option value="10PM">10PM</option>
+            <option value="11PM">11PM</option>
+            <option value="12AM">12AM</option>
+            <option value="1AM">1AM</option>
+            <option value="2AM">2AM</option>
+            <option value="3AM">3AM</option>
+            <option value="4AM">4AM</option>
+            <option value="5AM">5AM</option>
+            <option value="6AM">6AM</option>
+            <option value="7AM">7AM</option>
+          </select>
+          </label>
+
+          <button id="submit">Submit</button>
+        </form>
+
+        <textarea name="description" cols="30" rows="10">Description</textarea>
+      </div>
+    </div>
+</div>
+
     <div class="schedule-table">
 
       <h2>Scheduled Events for Monday</h2>
@@ -79,7 +138,6 @@
       </table>
 
     </div>
-
   </div>
   <!--container-->
 
