@@ -1,22 +1,58 @@
-var days = document.querySelector('.days');
-var h2 = document.querySelector('h2');
+// class weekSchedule {
+//   constructor{
+// this.day = {}
+//   }
+// }
 
-days.addEventListener('click', selectedDay);
+var schedule = {
+  Sunday: {
+    day: 'Sunday',
+    todo: []
+  },
+  Monday: {
+    day: 'Monday',
+    todo: []
+
+
+  },
+  Tuesday: {
+    day: 'Tuesday',
+    todo: []
+
+
+  },
+  Wednesday: {
+    day: 'Wednesday',
+    todo: []
+
+
+  },
+  Thursday: {
+    day: 'Thursday',
+    todo: []
+
+
+  },
+  Friday: {
+    day: 'Friday',
+    todo: []
+
+
+  },
+  Saturday: {
+    day: 'Saturday',
+    todo: []
+
+
+  }
+};
+
+
+
+var days = document.querySelector('.days');
 
 function selectedDay() {
   if (event.target.className === days.className) {
     return;
   } else {
-    var selectedText = event.target.textContent;
-    h2.textContent = 'Scheduled Events for ' + selectedText;
-  }
-}
 
-// days.addEventListener('click', function (event) {
-//   if (event.target===days){
-//     return
-//   } else {
-//     selectedDay = event.target.textContent;
-//     h2.textContent = 'Scheduled Events for ' + selectedDay;
-//   }
-// });
