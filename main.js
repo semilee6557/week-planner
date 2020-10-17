@@ -8,54 +8,47 @@ var schedule = {
   Sunday: {
     day: 'Sunday',
     isSelected: false,
-    todo: {
-    }
+    todo: {}
   },
   Monday: {
     day: 'Monday',
     isSelected: false,
-    todo: {
-    }
+    todo: {}
 
 
   },
   Tuesday: {
     day: 'Tuesday',
     isSelected: false,
-    todo: {
-    }
+    todo: {}
 
 
   },
   Wednesday: {
     day: 'Wednesday',
     isSelected: false,
-    todo: {
-    }
+    todo: {}
 
 
   },
   Thursday: {
     day: 'Thursday',
     isSelected: false,
-    todo: {
-    }
+    todo: {}
 
 
   },
   Friday: {
     day: 'Friday',
     isSelected: false,
-    todo: {
-    }
+    todo: {}
 
 
   },
   Saturday: {
     day: 'Saturday',
     isSelected: false,
-    todo: {
-    }
+    todo: {}
 
 
   }
@@ -66,17 +59,14 @@ var schedule = {
 var days = document.querySelector('.days');
 var modal = document.querySelector('.modal');
 var addEntryBtn = document.querySelector('.add-entry');
+
+
+
 var form = document.querySelector('form');
-
-
-var scheduleDay = document.querySelector('#day');
-var scheduleTime = document.querySelector('#time');
-var textarea = document.querySelector('textarea');
-
 
 days.addEventListener('click', selectedDay);
 addEntryBtn.addEventListener('click', showModal);
-form.addEventListener('change', setSchedule);
+form.addEventListener('submit', setSchedule);
 
 
 function selectedDay() {
@@ -88,11 +78,11 @@ function selectedDay() {
 
     h2.textContent = 'Scheduled Events for ' + selectedText;
 
-      var td = document.querySelectorAll('td');
+    var td = document.querySelectorAll('td');
 
 
-  td[0].textContent = schedule[selectedText].todo.time;
-  td[1].textContent = schedule[selectedText].todo.description;
+    td[0].textContent = schedule[selectedText].todo.time;
+    td[1].textContent = schedule[selectedText].todo.description;
 
   }
 }
@@ -101,23 +91,27 @@ function showModal() {
   modal.className = "modal";
 }
 
-function setSchedule() {
+
+function setSchedule(event) {
+  event.preventDefault();
+
+  var scheduleDay = document.querySelector('#day');
+  var scheduleTime = document.querySelector('#time');
+  var textarea = document.querySelector('textarea');
 
   var dayNum = scheduleDay.selectedIndex;
   var timeNum = scheduleTime.selectedIndex;
+
   var willScheduleDay = scheduleDay.options[dayNum].textContent;
   var willScheduleTime = scheduleTime.options[timeNum].textContent;
   var description = textarea.textContent;
 
   schedule[willScheduleDay].todo.time = willScheduleTime;
   schedule[willScheduleDay].todo.description = description;
-  var submit = document.querySelector('#submit');
 
-submit.addEventListener('click', update);
-
-}
-
-function update() {
-  modal.className += " hidden";
-
+  if (willScheduleDay === 'Day' || willScheduleTime === 'Time') {
+    return;
+  } else {
+    modal.className += " hidden";
+  }
 }
