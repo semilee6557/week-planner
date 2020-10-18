@@ -137,7 +137,6 @@ form {
 select {
   width: 5rem;
   border: 2px solid black;
-
 }
 
 textarea {
@@ -145,5 +144,4 @@ textarea {
   height: 100px;
   margin: 10px 0 40px;
   border: 2px solid black;
-
 }
