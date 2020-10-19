@@ -145,3 +145,18 @@ textarea {
   margin: 10px 0 40px;
   border: 2px solid black;
 }
+
+
+.update {
+  background-color: blue;
+  border: 2px solid black;
+  color: white;
+  position: relative;
+  left: 40%;
+  width: 90px;
+  cursor: pointer;
+}
+
+select:disabled {
+  color: black;
+}
