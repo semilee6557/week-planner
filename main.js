@@ -31,14 +31,14 @@ function selectedDay() {
   }
 }
 
-function findTodoListOnDay(day) {
-  var dayIndex = [];
+function findTodoListIdOnDay(day) {
+  var todoListIdOnDay = [];
   for (var n = 0; n < schedule.length; n++) {
     if (schedule[n].currentDay === day) {
-      dayIndex.push(n);
+      todoListIdOnDay.push(schedule[n].id);
     }
   }
-  return dayIndex;
+  return todoListIdOnDay;
 }
 
 function findObjectIndexWithId(num){
@@ -53,14 +53,22 @@ function findObjectIndexWithId(num){
 function showContent(day) {
 
 
-  var TodoListOnDay = findTodoListOnDay(day);
+  var todoListIdOnDay = findTodoListIdOnDay(day);
+  var objArray = [];
+    for (var a = 0; a < schedule.length; n++) {
+    for (var n = 0; n < todoListIdOnDay.length; n++) {
+    if (schedule[a].id === todoListIdOnDay[n]) {
+objArray.push(schedule[a]);
+    }
+    }
+  }
+  console.log('objArray', objArray);
   headingDay.textContent = day;
   var tbody = document.querySelector('tbody');
   tbody.innerHTML = "";
 
-  for (var i = 0; i < TodoListOnDay.length; i++) {
+  for (var i = 0; i < objArray.length; i++) {
 
-    var todoObject = schedule[TodoListOnDay[i]];
     var tr = document.createElement('tr');
     var tdTime = document.createElement('td');
     var tdDesc = document.createElement('td');
@@ -68,10 +76,10 @@ function showContent(day) {
     updateBtn.className = "update";
     updateBtn.textContent = "Update";
 
-    tr.className = todoObject.id;
-    tdTime.textContent = todoObject.todo.time;
+    tr.className = objArray.id;
+    tdTime.textContent = objArray.todo.time;
     tdTime.className = "time";
-    tdDesc.textContent = todoObject.todo.description;
+    tdDesc.textContent = objArray.todo.description;
     tdDesc.className = "description";
     tdDesc.appendChild(updateBtn);
     tr.append(tdTime, tdDesc);
