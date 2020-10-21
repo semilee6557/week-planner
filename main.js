@@ -1,31 +1,4 @@
-var schedule = {
-  Sunday: {
-    todo: []
-  },
-  Monday: {
-    todo: []
-  },
-  Tuesday: {
-    todo: []
-  },
-  Wednesday: {
-    todo: []
-  },
-  Thursday: {
-    todo: []
-  },
-  Friday: {
-    todo: []
-  },
-  Saturday: {
-    todo: []
-  }
-};
-
-
-
-
-
+var schedule = [];
 
 
 var days = document.querySelector('.days');
@@ -36,16 +9,16 @@ var scheduleTable = document.querySelector('.schedule-table');
 var scheduleDay = document.querySelector('#day');
 var scheduleTime = document.querySelector('#time');
 var textarea = document.querySelector('textarea');
-    var modalHeading = document.querySelector('.modal-heading');
-
+var modalHeading = document.querySelector('.modal-heading');
+var headingDay = document.querySelector('span');
 
 
 days.addEventListener('click', selectedDay);
 addEntryBtn.addEventListener('click', showModal);
 form.addEventListener('submit', setSchedule);
 scheduleTable.addEventListener('click', changeSchedule);
-
-
+window.addEventListener('keyup', closeModal);
+textarea.addEventListener('click', clearTextarea);
 
 
 function selectedDay() {
@@ -58,83 +31,129 @@ function selectedDay() {
   }
 }
 
-function showContent(para) {
-  var h2 = document.querySelector('h2');
+function findTodoListOnDay(day) {
+  var dayIndex = [];
+  for (var n = 0; n < schedule.length; n++) {
+    if (schedule[n].currentDay === day) {
+      dayIndex.push(n);
+    }
+  }
+  return dayIndex;
+}
 
-  h2.textContent = 'Scheduled Events for ' + para;
+function findObjectIndexWithId(num){
 
-  var savedSchedule = schedule[para].todo;
+    for (var n = 0; n < schedule.length; n++) {
+    if (schedule[n].id == num) {
+      return n;
+    }
+}}
+
+
+function showContent(day) {
+
+
+  var TodoListOnDay = findTodoListOnDay(day);
+  headingDay.textContent = day;
   var tbody = document.querySelector('tbody');
   tbody.innerHTML = "";
 
-  for (var i = 0; i < savedSchedule.length; i++) {
+  for (var i = 0; i < TodoListOnDay.length; i++) {
+
+    var todoObject = schedule[TodoListOnDay[i]];
     var tr = document.createElement('tr');
     var tdTime = document.createElement('td');
     var tdDesc = document.createElement('td');
     var updateBtn = document.createElement('button');
-    var order = i + 1;
-    updateBtn.className = "update " + order + " " + para + " " + savedSchedule[i].time;
+    updateBtn.className = "update";
     updateBtn.textContent = "Update";
 
-    tdTime.textContent = savedSchedule[i].time;
-    tdDesc.textContent = savedSchedule[i].description;
+    tr.className = todoObject.id;
+    tdTime.textContent = todoObject.todo.time;
+    tdTime.className = "time";
+    tdDesc.textContent = todoObject.todo.description;
+    tdDesc.className = "description";
     tdDesc.appendChild(updateBtn);
     tr.append(tdTime, tdDesc);
     tbody.appendChild(tr);
+console.log(tr);
+  }}
 
+
+function clearTextarea() {
+  if (textarea.value === "Description") {
+    textarea.value = "";
   }
 }
-
-
 
 function showModal() {
   modal.className = "modal";
 }
 
-
+function closeModal(event) {
+  if (event.key === 'Escape') {
+    if (modal.className === "modal") {
+      scheduleDay.selectedIndex = 0;
+      scheduleTime.selectedIndex = 0;
+      textarea.value = "Description";
+      modal.className += " hidden";
+    }
+  }
+}
 
 function setSchedule(event) {
   event.preventDefault();
+
 
   var dayNum = scheduleDay.selectedIndex;
   var timeNum = scheduleTime.selectedIndex;
 
   var willScheduleDay = scheduleDay.options[dayNum].textContent;
   var willScheduleTime = scheduleTime.options[timeNum].textContent;
-  var desc = textarea.value;
+  var willScheduledesc = textarea.value;
 
-
-  var newTodo = {};
-  newTodo.time = willScheduleTime;
-  newTodo.timeIndex = dayNum;
-  newTodo.description = desc;
-  schedule[willScheduleDay].todo.push(newTodo);
-
-
-  if (willScheduleDay === 'Day' || willScheduleTime === 'Time') {
+if (willScheduleDay === 'Day' || willScheduleTime === 'Time') {
     return;
   } else {
+
+  var newObject = {};
+  var newTodo = {};
+
+  newTodo.time = willScheduleTime;
+  newTodo.description = willScheduledesc;
+
+  newObject.currentDay = willScheduleDay;
+  newObject.id = schedule.length+1;
+
+  newObject.todo = newTodo;
+
+  schedule.push(newObject);
+
+
+
     modal.className += " hidden";
     scheduleDay.selectedIndex = 0;
     scheduleTime.selectedIndex = 0;
-
+    textarea.value = "Description";
     showContent(willScheduleDay);
   }
 }
 
 function changeSchedule(event) {
-  event.preventDefault();
   if (event.target.className.indexOf('update') === -1) {
     return;
   } else {
-    console.log(event.target);
     modal.className = 'modal';
     modalHeading.textContent = "Update Entry";
 
-    var updateClassName = event.target.classList;
-    var todoOrderNum = parseInt(updateClassName[1]);
-    var dayTochange = updateClassName[2];
-    var timeTochange = updateClassName[3];
+    var id = parseFloat(event.target.parentElement.parentElement.className);
+    console.log('id',id);
+    var todoIndex = findObjectIndexWithId(id);
+    var currentObject = schedule[todoIndex];
+    var dayTochange = schedule[todoIndex].currentDay;
+
+    var timeTochange = currentObject.todo.time;
+    var descTochange = currentObject.todo.description;
 
     var dayOption = document.querySelectorAll('.day-option');
     var timeOption = document.querySelectorAll('.time-option');
@@ -151,6 +170,7 @@ function changeSchedule(event) {
         var dayOptionIndex = n;
       }
     }
+    dayOption[dayOptionIndex].selected = 'true';
 
     var timeOptionList = [];
 
@@ -158,14 +178,55 @@ function changeSchedule(event) {
       timeOptionList.push(timeOption[c].textContent);
     }
 
-    dayOption[dayOptionIndex].selected = 'true';
-
-    var timeIndex = schedule[dayTochange].todo[todoOrderNum-1].timeIndex;
-    timeOption[timeIndex].selected = 'true';
-
-    textarea.textContent = schedule[dayTochange].todo[timeTochange];
- schedule[dayTochange].todo.splice(todoOrderNum-1, 1);
+    for (var t = 0; t < timeOptionList.length; t++) {
+      if (timeOptionList[t] === timeTochange) {
+        var timeIndexOnSelete = t;
+      }
+    }
 
 
+    timeOption[timeIndexOnSelete].selected = 'true';
+
+    textarea.value = descTochange;
+
+
+    form.removeEventListener('submit', setSchedule);
+    form.addEventListener('submit', function(){updateDataObject(id);});
+
+
+  }
 }
+
+function updateDataObject(idNum) {
+  event.preventDefault();
+
+
+  var dayNum = scheduleDay.selectedIndex;
+  var timeNum = scheduleTime.selectedIndex;
+
+  var willScheduleDay = scheduleDay.options[dayNum].textContent;
+  var willScheduleTime = scheduleTime.options[timeNum].textContent;
+  var willScheduledesc = textarea.value;
+
+  if (willScheduleDay === 'Day' || willScheduleTime === 'Time') {
+    return;
+  } else {
+
+  var indexOfObject = findObjectIndexWithId(idNum);
+  schedule[indexOfObject].todo.time = willScheduleTime;
+  schedule[indexOfObject].currentDay = willScheduleDay;
+  schedule[indexOfObject].todo.description = willScheduledesc;
+
+  modal.className += " hidden";
+    modalHeading.textContent = "Add Entry";
+    form.removeEventListener('submit', function(){updateDataObject();});
+        form.addEventListener('submit', setSchedule);
+
+    scheduleDay.selectedIndex = 0;
+    scheduleTime.selectedIndex = 0;
+    textarea.value = "Description";
+    showContent(willScheduleDay);
+
+  }
+
 }
