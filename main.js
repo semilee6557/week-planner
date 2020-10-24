@@ -35,7 +35,6 @@ function scheduleOnDay(event) {
     return;
   }
 
-  schedule.currentDaySelected = event.target.className;
 
   displaySchedule(event.target.className);
 }
@@ -102,6 +101,8 @@ function displaySchedule(currentDay) {
 
   heading.textContent = "Scheduled Events for " + fistLetterToCapital;
   heading.className = currentDay;
+ schedule.currentDaySelected = currentDay;
+
   tbody.innerHTML = "";
 
   for (var i = 0; i < schedule[currentDay].length; i++) {
