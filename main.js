@@ -31,7 +31,6 @@ form.addEventListener('submit', setSchedule);
 scheduleTable.addEventListener('click', showUpdateModal);
 
 function scheduleOnDay(event) {
-  debugger;
   if (event.target.className === 'days') {
     return;
   }
@@ -46,7 +45,6 @@ function scheduleOnDay(event) {
 
 function setSchedule(event) {
   event.preventDefault();
-  debugger;
   var selectedDay = dayList.options[dayList.selectedIndex].value;
   var selectedTime = timeList.options[timeList.selectedIndex].value;
   var descriptionInput = textarea.value;
@@ -69,21 +67,21 @@ function setSchedule(event) {
 }
 
 function showModal() {
-  debugger;
   modal.className = "modal";
-  // textarea.addEventListener('click', clearTextarea);
+  textarea.addEventListener('click', clearTextarea);
 
 }
 
-// function clearTextarea() {
-//   if(!textarea.value=='Description'){
-//     return;
-//   }
-//   textarea.value = '';
-// }
+function clearTextarea() {
+  // debugger;
+  if(textarea.value!=='Description'){
+    return;
+  }
+  console.log(textarea.value);
+  textarea.value = '';
+}
 
 function closeModal() {
-  debugger;
   modal.className += " hidden";
   modalHeading.textContent = "Add Entry";
   dayList.value = 'day';
@@ -95,7 +93,6 @@ function closeModal() {
 
 
 function displaySchedule(currentDay) {
-debugger;
   var fistLetterToCapital = '';
   fistLetterToCapital += currentDay[0].toUpperCase();
 
@@ -127,11 +124,10 @@ debugger;
 
 
 function showUpdateModal(event) {
-  if (!event.target.className) {
+  if (event.target.className!=='update') {
     return;
   }
-
-  debugger;
+console.log(event.target.className);
 
   schedule.currentDaySelected = heading.className;
   var currentDay = schedule.currentDaySelected;
@@ -145,31 +141,31 @@ function showUpdateModal(event) {
   timeList.value = currentTodo.time;
   textarea.value = currentTodo.description;
 
-modal.className = "modal";
-form.removeEventListener('submit', setSchedule);
-form.addEventListener('submit', function(){changeSchedule(currentDay, currentDayIndex, currentId);});
-}
-
-function changeSchedule(currentDay, currentDayIndex, currentId){
-debugger;
-  event.preventDefault();
-  var selectedDay = dayList.value;
-  var selectedTime = timeList.value;
-  var descriptionInput = textarea.value;
-
-  if (selectedDay === 'day' || selectedTime === 'time') {
-    return;
-  }
-  var newTodo = {};
-  newTodo.time = selectedTime;
-  newTodo.description = descriptionInput;
-  newTodo.id = currentId;
-  schedule[currentDay].splice(currentDayIndex,1);
-  schedule[selectedDay].push(newTodo);
-
-  closeModal();
-  displaySchedule(selectedDay);
-  form.removeEventListener('submit', function(){changeSchedule(currentDay, currentDayIndex, currentId);});
+  modal.className = "modal";
+  form.removeEventListener('submit', setSchedule);
+  form.addEventListener('submit', changeScheduleFunc);
+  form.removeEventListener('submit', changeScheduleFunc);
   form.addEventListener('submit', setSchedule);
 
 }
+var changeScheduleFunc =
+  function changeSchedule(currentDay, currentDayIndex, currentId) {
+    event.preventDefault();
+    var selectedDay = dayList.value;
+    var selectedTime = timeList.value;
+    var descriptionInput = textarea.value;
+
+    if (selectedDay === 'day' || selectedTime === 'time') {
+      return;
+    }
+    var newTodo = {};
+    newTodo.time = selectedTime;
+    newTodo.description = descriptionInput;
+    newTodo.id = currentId;
+    schedule[currentDay].splice(currentDayIndex, 1);
+    schedule[selectedDay].push(newTodo);
+
+    closeModal();
+    displaySchedule(selectedDay);
+
+  };
