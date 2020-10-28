@@ -70,6 +70,10 @@ td {
   border-left: 2px solid black;
 }
 
+td{
+  position: relative;
+}
+
 tbody tr:nth-child(odd) td {
   background-color: lightgray;
 }
@@ -152,8 +156,8 @@ textarea {
   background-color: blue;
   border: 2px solid black;
   color: white;
-  position: relative;
-  left: 40%;
+  position: absolute;
+  right: 140px;
   width: 90px;
   cursor: pointer;
 }
