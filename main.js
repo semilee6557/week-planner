@@ -7,6 +7,7 @@ var schedule = {
   saturday: [],
   sunday: [],
   currentDaySelected: 'monday',
+  currentIdSelected: 0,
   nextId: 1
 };
 
@@ -73,10 +74,9 @@ function showModal() {
 
 function clearTextarea() {
   // debugger;
-  if(textarea.value!=='Description'){
+  if (textarea.value !== 'Description') {
     return;
   }
-  console.log(textarea.value);
   textarea.value = '';
 }
 
@@ -101,7 +101,7 @@ function displaySchedule(currentDay) {
 
   heading.textContent = "Scheduled Events for " + fistLetterToCapital;
   heading.className = currentDay;
- schedule.currentDaySelected = currentDay;
+  schedule.currentDaySelected = currentDay;
 
   tbody.innerHTML = "";
 
@@ -125,10 +125,9 @@ function displaySchedule(currentDay) {
 
 
 function showUpdateModal(event) {
-  if (event.target.className!=='update') {
+  if (event.target.className !== 'update') {
     return;
   }
-console.log(event.target.className);
 
   schedule.currentDaySelected = heading.className;
   var currentDay = schedule.currentDaySelected;
@@ -137,6 +136,8 @@ console.log(event.target.className);
   var currentDayIndex = parseFloat(event.target.parentElement.parentElement.className) - 1;
   var currentTodo = schedule[currentDay][currentDayIndex];
   var currentId = currentTodo.id;
+  schedule.currentIdSelected = currentId;
+
   modalHeading.textContent = "Update Entry";
   dayList.value = currentDay;
   timeList.value = currentTodo.time;
@@ -145,13 +146,12 @@ console.log(event.target.className);
   modal.className = "modal";
   form.removeEventListener('submit', setSchedule);
   form.addEventListener('submit', changeScheduleFunc);
-  form.removeEventListener('submit', changeScheduleFunc);
-  form.addEventListener('submit', setSchedule);
 
 }
 var changeScheduleFunc =
-  function changeSchedule(currentDay, currentDayIndex, currentId) {
+  function changeSchedule() {
     event.preventDefault();
+
     var selectedDay = dayList.value;
     var selectedTime = timeList.value;
     var descriptionInput = textarea.value;
@@ -159,14 +159,28 @@ var changeScheduleFunc =
     if (selectedDay === 'day' || selectedTime === 'time') {
       return;
     }
-    var newTodo = {};
-    newTodo.time = selectedTime;
-    newTodo.description = descriptionInput;
-    newTodo.id = currentId;
-    schedule[currentDay].splice(currentDayIndex, 1);
-    schedule[selectedDay].push(newTodo);
 
+    var indexOnDay = 0;
+    for (var i = 0; i < schedule.currentDaySelected.length; i++) {
+      if (schedule.currentDaySelected[i].id === schedule.currentIdSelected) {
+        return indexOnDay = i;
+      }
+    }
+
+    var currentObj = schedule[schedule.currentDaySelected][indexOnDay];
+    currentObj.time = selectedTime;
+    currentObj.description = descriptionInput;
+
+    if (selectedDay !== schedule.currentDaySelected) {
+      schedule[schedule.currentDaySelected].splice(indexOnDay, 1);
+      schedule[selectedDay].push(currentObj);
+
+    }
+
+    form.className = "";
     closeModal();
     displaySchedule(selectedDay);
+    form.removeEventListener('submit', changeScheduleFunc);
+    form.addEventListener('submit', setSchedule);
 
   };
